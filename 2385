@@ -1,0 +1,42 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int val) { this.val = val; }
+}
+
+class Solution {
+    private int maxDistance = 0; // Final answer score store karega
+
+    public int amountOfTime(TreeNode root, int start) {
+        traverse(root, start);
+        return maxDistance;
+    }
+
+    private int traverse(TreeNode root, int start) {
+        if (root == null) return 0;
+
+        int leftDepth = traverse(root.left, start);
+        int rightDepth = traverse(root.right, start);
+
+        // Agar current node hi start node hai
+        if (root.val == start) {
+            maxDistance = Math.max(leftDepth, rightDepth);
+            return -1; // -1 represents ki start node mil gaya hai
+        }
+
+        // Agar start node left subtree ya right subtree me mil chuka hai
+        if (leftDepth < 0 || rightDepth < 0) {
+            // Dono depths ka absolute gap nikal kar maxDistance update karenge
+            maxDistance = Math.max(maxDistance, Math.abs(leftDepth) + Math.abs(rightDepth));
+            
+            // Start node se distance ko -1 aur badha kar upar parent ko bhejenge
+            return Math.min(leftDepth, rightDepth) - 1;
+        }
+
+        // Normal case: Normal subtree ki max height return karo
+        return Math.max(leftDepth, rightDepth) + 1;
+    }
+}
