@@ -1,0 +1,29 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    int p = 0; // Preorder index pointer
+    Map<Integer, Integer> m = new HashMap<>(); // Quick index lookup map
+
+    public TreeNode buildTree(int[] a, int[] b) { // a = preorder, b = inorder
+        // Inorder elements ko map mein store karo index ke sath
+        for (int i = 0; i < b.length; i++) m.put(b[i], i);
+        
+        // Helper function ko call karo complete range ke sath
+        return helper(a, 0, b.length - 1);
+    }
+
+    private TreeNode helper(int[] a, int l, int r) { // l = left boundary, r = right boundary
+        if (l > r) return null; // Base case: no elements left
+
+        // Current root banao aur preorder pointer ko aage badhao
+        TreeNode root = new TreeNode(a[p++]);
+        int idx = m.get(root.val); // Inorder mein root ka index nikalo
+
+        // Subtrees ko recursively connect karo
+        root.left = helper(a, l, idx - 1);  // Left subtree boundary
+        root.right = helper(a, idx + 1, r); // Right subtree boundary
+
+        return root;
+    }
+}
