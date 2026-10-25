@@ -1,0 +1,61 @@
+import java.util.HashMap;
+import java.util.Map;
+
+// Binary Tree ke node ki definition
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+class Solution {
+    // Postorder index ko track karne ke liye global ya class-level variable
+    int postIdx;
+    // Inorder elements ke index ko O(1) mein lookup karne ke liye map
+    Map<Integer, Integer> inorderMap;
+
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        inorderMap = new HashMap<>();
+        // Postorder hamesha piche se start hota hai (Root last mein hota hai)
+        postIdx = postorder.length - 1;
+
+        // Inorder ke saare elements aur unke index map mein daal do
+        for (int i = 0; i < inorder.length; i++) {
+            inorderMap.put(inorder[i], i);
+        }
+
+        // Helper function ko call karo full range ke saath
+        return helper(postorder, 0, inorder.length - 1);
+    }
+
+    private TreeNode helper(int[] postorder, int inStart, int inEnd) {
+        // Base Case: Agar range invalid ho jaye toh null return karo
+        if (inStart > inEnd) {
+            return null;
+        }
+
+        // Postorder ka current element hi hamara root node banega
+        int rootVal = postorder[postIdx];
+        TreeNode root = new TreeNode(rootVal);
+        
+        // Agle node par jaane ke liye index ko decrease karo
+        postIdx--;
+
+        // Inorder array mein is root ka index dhoodo
+        int rootInorderIdx = inorderMap.get(rootVal);
+
+        // IMP: Postorder mein hamesha pehle RIGHT subtree banta hai phir LEFT
+        // Kyunki hum piche se (right to left) travel kar rahe hain
+        root.right = helper(postorder, rootInorderIdx + 1, inEnd);
+        root.left = helper(postorder, inStart, rootInorderIdx - 1);
+
+        return root;
+    }
+}
