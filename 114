@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public void flatten(TreeNode root) {
+        // Agar tree empty hai, toh kuch nahi karna
+        if (root == null) return;
+        
+        TreeNode curr = root;
+        
+        // Pure tree par traverse karenge
+        while (curr != null) {
+            
+            // Agar left child exist karta hai
+            if (curr.left != null) {
+                
+                // Left subtree ka sabse rightmost node (predecessor) dhoondo
+                TreeNode prev = curr.left;
+                while (prev.right != null) {
+                    prev = prev.right;
+                }
+                
+                // Current ke right subtree ko left subtree ke rightmost node se jod do
+                prev.right = curr.right;
+                
+                // Current ke right child ko ab uska left child bana do
+                curr.right = curr.left;
+                
+                // Left child ko null set kar do (kyunki linked list me left humesha null chahiye)
+                curr.left = null;
+            }
+            
+            // Agle node par move karo (jo ki ab right side me shift ho chuka hai)
+            curr = curr.right;
+        }
+    }
+}
