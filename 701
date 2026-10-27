@@ -1,0 +1,20 @@
+class Solution {
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+        // Agar tree khali hai, to naya node banao aur return kar do
+        if (root == null) {
+            return new TreeNode(val);
+        }
+        
+        // Agar value badi hai, toh right side mein insert karo
+        if (val > root.val) {
+            root.right = insertIntoBST(root.right, val);
+        } 
+        // Agar value chhoti hai, toh left side mein insert karo
+        else {
+            root.left = insertIntoBST(root.left, val);
+        }
+        
+        // Modified root return karo
+        return root;
+    }
+}
