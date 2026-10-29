@@ -1,0 +1,55 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> result = new ArrayList<>();
+        
+        // Base case: Agar matrix empty hai toh khali list return karo
+        if (matrix == null || matrix.length == 0) {
+            return result;
+        }
+        
+        // 4 boundaries define karein
+        int top = 0;
+        int bottom = matrix.length - 1;
+        int left = 0;
+        int right = matrix[0].length - 1;
+        
+        // Jab tak boundaries cross nahi hoti, loop chalega
+        while (top <= bottom && left <= right) {
+            
+            // 1. Left se Right traverse karein (Top row constant rahegi)
+            for (int i = left; i <= right; i++) {
+                result.add(matrix[top][i]);
+            }
+            top++; // Top row process ho gayi, toh top ko niche shift karein
+            
+            // 2. Top se Bottom traverse karein (Right column constant rahega)
+            for (int i = top; i <= bottom; i++) {
+                result.add(matrix[i][right]);
+            }
+            right--; // Right column process ho gaya, toh right ko left shift karein
+            
+            // 3. Right se Left traverse karein (Bottom row constant rahegi)
+            // Extra check zaroori hai taaki duplicate row print na ho
+            if (top <= bottom) {
+                for (int i = right; i >= left; i--) {
+                    result.add(matrix[bottom][i]);
+                }
+                bottom--; // Bottom row process ho gayi, toh bottom ko upar shift karein
+            }
+            
+            // 4. Bottom se Top traverse karein (Left column constant rahega)
+            // Extra check zaroori hai taaki duplicate column print na ho
+            if (left <= right) {
+                for (int i = bottom; i >= top; i--) {
+                    result.add(matrix[i][left]);
+                }
+                left++; // Left column process ho gaya, toh left ko right shift karein
+            }
+        }
+        
+        return result;
+    }
+}
