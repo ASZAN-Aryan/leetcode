@@ -1,0 +1,31 @@
+import java.util.*;
+
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        // Array ko sort karna mandatory hai taaki duplicates saath aa jayein
+        Arrays.sort(nums); 
+        
+        backtrack(nums, 0, new ArrayList<>(), result);
+        return result;
+    }
+
+    private void backtrack(int[] nums, int start, List<Integer> currentSubset, List<List<Integer>> result) {
+        // Har ek step pe current subset ko result mein add kar lo (power set ka hissa hai)
+        result.add(new ArrayList<>(currentSubset));
+
+        for (int i = start; i < nums.length; i++) {
+            // Agar same level pe duplicate element aa raha hai, toh skip maar do
+            if (i > start && nums[i] == nums[i - 1]) {
+                continue; 
+            }
+            
+            // Element ko choose karo
+            currentSubset.add(nums[i]);
+            // Aage ke elements ke liye recursion call karo
+            backtrack(nums, i + 1, currentSubset, result);
+            // Backtrack karo: pichhla element hatao next combination try karne ke liye
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+}
