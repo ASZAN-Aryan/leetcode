@@ -1,0 +1,24 @@
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        // If the array has 2 or fewer elements, every element already meets the rule.
+        if (nums.length <= 2) {
+            return nums.length;
+        }
+        
+        // 'k' tracks the index where the next valid element should be placed.
+        // The first two elements are always allowed.
+        int k = 2; 
+        
+        // Start scanning from the 3rd element (index 2)
+        for (int i = 2; i < nums.length; i++) {
+            // Compare the current element with the element two positions behind the write pointer.
+            // If they are different, it means we haven't reached 3 duplicates yet.
+            if (nums[i] != nums[k - 2]) {
+                nums[k] = nums[i];
+                k++;
+            }
+        }
+        
+        return k;
+    }
+}
