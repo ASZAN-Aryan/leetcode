@@ -1,0 +1,25 @@
+class Solution {
+    public boolean stoneGame(int[] piles) {
+        int n = piles.length;
+        // dp[i][j] stores the maximum net stones a player can get from piles[i] to piles[j]
+        int[][] dp = new int[n][n];
+        
+        // Base case: when there is only 1 pile left, the player takes that pile
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = piles[i];
+        }
+        
+        // Build the DP table for intervals of increasing lengths
+        for (int len = 2; len <= n; len++) {
+            for (int i = 0; i <= n - len; i++) {
+                int j = i + len - 1;
+                // The player chooses either the left pile (i) or the right pile (j)
+                // and subtracts the opponent's optimal future score
+                dp[i][j] = Math.max(piles[i] - dp[i + 1][j], piles[j] - dp[i][j - 1]);
+            }
+        }
+        
+        // If the score difference is greater than 0, Alice wins
+        return dp[0][n - 1] > 0;
+    }
+}
