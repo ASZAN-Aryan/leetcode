@@ -1,0 +1,30 @@
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+    public int findMaximumXOR(int[] nums) {
+        int maxResult = 0;
+        int bitMask = 0;
+        
+        for (int bitIndex = 30; bitIndex >= 0; bitIndex--) {
+            // Keep track of the prefix bits from the most significant down to the current position
+            bitMask |= (1 << bitIndex);
+            
+            Set<Integer> uniquePrefixes = new HashSet<>();
+            for (int number : nums) {
+                uniquePrefixes.add(number & bitMask);
+            }
+            
+            int targetCandidate = maxResult | (1 << bitIndex);
+            for (int prefix : uniquePrefixes) {
+                // If A XOR B = C, then A XOR C = B. Check if a matching prefix pair exists.
+                if (uniquePrefixes.contains(prefix ^ targetCandidate)) {
+                    maxResult = targetCandidate;
+                    break;
+                }
+            }
+        }
+        
+        return maxResult;
+    }
+}
